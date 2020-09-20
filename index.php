@@ -8,49 +8,22 @@ $start=microtime(true);
 //autoload 
 include __DIR__ . '/autoload.php';
 
-$cache_file = env('CACHE_FILE');
 
-if(file_exists($cache_file) && filemtime($cache_file) > time()-20){
-	echo "From Cache...<br/>";
-	include($cache_file);
-}else{
-	$model_name = 'myModel';
+$url_elements = explode('/', $_SERVER['PATH_INFO']);
 
-	if(class_exists($model_name)){
+if(!empty($url_elements[1])){	
+
+	$page_name = $url_elements[1];
 		
-		// config
-		$config = 'databaseConfig';
-
-
-		if(class_exists($config)){
-
-			// PDO db object
-			$db = new $config();
-			$conn = $db->connect();
-
-			// model object
-			$model = new $model_name($conn);
-			
-			$result = $model->getAll();
-
-			$str="<table border='1'>";
-			$str.="<tr><td>Name</td><td>City</td><td>Game</td><td>Study</td><td>Teacher</td></tr>";
-
-				foreach($result as $list){				
-					$list = (object) $list;
-
-					$str.="<tr><td>".$list->name."</td><td>".$list->city."</td><td>".$list->game."</td><td>".$list->study."</td><td>".$list->teacher."</td></tr>";
-				}
-			$str.="</table>";
-			$handle=fopen($cache_file,'w');
-			fwrite($handle,$str);
-			fclose($handle);
-			echo "Cache Created...<br/>";
-			echo $str;
-		}
-
+	$contrller_name = 'cacheController';
+	if(class_exists($contrller_name)){
+		$controller = new $contrller_name();
+		
+		$response = $controller->pageCache($page_name);
+		echo $response;
 	}
 }
+
 
 $end=microtime(true);
 echo "Time taken = ".round($end-$start,4);

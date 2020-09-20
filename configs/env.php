@@ -1,4 +1,3 @@
-
 <?php
   $variables = [
       'APP_NAME'     => 'CachingAPIs',
@@ -6,7 +5,8 @@
       'DB_USERNAME'  => 'root',
       'DB_PASSWORD'  => '',
       'DB_NAME'      => 'php_cache',
-      'CACHE_FILE'   => 'cache/index.cache.php'
+      'CACHE_DIR'   => './cache',
+      'CACHE_PAGE_DURATION'   => 20
   ];
 
   foreach ($variables as $key => $value) {
